@@ -39,6 +39,7 @@ const submitForm = async (payload: any) => {
         toggleLoading();
     }, 500);
 };
+
 </script>
 
 <template>
