@@ -27,6 +27,15 @@ export default [
                     title: () => "Logout",
                 },
             },
+            {
+                path: "/register",
+                name: "auth.register",
+                component: () => import("@/views/auth/RegisterPage.vue"),
+                meta: {
+                    auth: "block",
+                    title: () => "Register",
+                },
+            },
         ],
     },
 ];

@@ -72,6 +72,29 @@ export const useAuthStore = defineStore("auth", () => {
         return { data, error };
     };
 
+    const createProfile = async (payload: {
+        id: string;
+        email: string;
+        first_name?: string;
+        last_name?: string;
+    }) => {
+        const profilePayload = {
+            id: payload.id,
+            email: payload.email,
+            first_name: payload.first_name || null,
+            last_name: payload.last_name || null,
+            created_at: new Date().toISOString(),
+        };
+
+        const { data, error } = await supabase.from("profiles").insert(profilePayload);
+
+        if (error) {
+            console.error("Error creating profile:", error);
+        }
+
+        return { data, error };
+    };
+
     const fetchProfile = async (): Promise<void> => {
         if (!user.value.id) {
             console.error("fetchProfile(): Authenticated User ID not found.");
@@ -99,5 +122,6 @@ export const useAuthStore = defineStore("auth", () => {
         signInWithPassword,
         signOut,
         signUp,
+        createProfile,
     };
 });

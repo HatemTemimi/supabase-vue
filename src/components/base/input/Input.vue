@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import type { HTMLAttributes } from "vue";
-import {ref, watch} from "vue"
+import { ref, watch} from "vue"
 
 // Define props
 const props = defineProps<{
@@ -34,6 +34,7 @@ const updateValue = (event: Event) => {
     internalValue.value = value;
     emits("update:modelValue", value);
 };
+
 </script>
 
 <template>
