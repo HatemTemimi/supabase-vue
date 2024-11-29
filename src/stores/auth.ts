@@ -110,14 +110,9 @@ export const useAuthStore = defineStore("auth", () => {
     };
 
     return {
-        // Setters
         setUser,
-
-        // Getters
         getProfile,
         getUser,
-
-        // Actions
         fetchProfile,
         signInWithPassword,
         signOut,

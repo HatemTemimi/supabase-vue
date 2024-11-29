@@ -6,15 +6,24 @@ import { useToast } from "@/components/base/toast/use-toast";
 import { Loader } from "lucide-vue-next";
 
 import { useAuthStore } from "@/stores/auth";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { Divider } from "@/components/base/divider";
 
 const authStore = useAuthStore();
 const router = useRouter();
 const { toast } = useToast();
 const isLoading = ref(false);
 
-const form = ref({
+interface RegisterData {
+    email: string;
+    password: string;
+    confirmPassword: string;
+    firstName?: string;
+    lastName?: string;
+}
+
+const form = ref<RegisterData>({
     email: "",
     password: "",
     confirmPassword: "",
@@ -22,22 +31,46 @@ const form = ref({
     lastName: "",
 });
 
+const passwordError = ref<string>("");
+const emailError = ref<string>("");
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+watch(() => form.value.email, (email) => {
+    if (!emailRegex.test(email) && email) {
+        emailError.value = "Please enter a valid email address.";
+    } else {
+        emailError.value = "";
+    }
+});
+
+watch(
+    [() => form.value.password, () => form.value.confirmPassword],
+    ([password, confirmPassword]) => {
+        if (password !== confirmPassword && confirmPassword) {
+            passwordError.value = "Passwords do not match.";
+        } else {
+            passwordError.value = "";
+        }
+    }
+);
+
 const toggleLoading = () => {
     isLoading.value = !isLoading.value;
 };
 
-const submitForm = async (payload: any) => {
+const submitForm = async () => {
     toggleLoading();
 
-    console.log(form);
-
-    if (form.value.password !== form.value.confirmPassword) {
-        toast({ description: "Passwords do not match.", variant: "destructive" });
+    if (passwordError.value || emailError.value) {
+        toast({
+            description: passwordError.value || emailError.value,
+            variant: "destructive",
+        });
         toggleLoading();
         return;
     }
 
-        // Sign up the user
     const { data: userData, error: signUpError } = await authStore.signUp({
         email: form.value.email,
         password: form.value.password,
@@ -49,28 +82,35 @@ const submitForm = async (payload: any) => {
         return;
     }
 
-      // Create the user's profile
-    const { error: profileError } = await authStore.createProfile({
-        id: userData.user?.id || '',
-        email: form.value.email,
-        first_name: form.value.firstName,
-        last_name: form.value.lastName,
-    });
+    //create profile only if User returned
+    if(userData.user?.id){
 
-    if (profileError) {
-        toast({ description: "Failed to create user profile. Please contact support.", variant: "destructive" });
-    } else {
-        toast({ description: "Account created successfully! Redirecting..." });
-        router.push({ name: "panel.dashboard" });
+        const { error: profileError } = await authStore.createProfile({
+            id: userData.user.id,
+            email: form.value.email,
+            first_name: form.value.firstName,
+            last_name: form.value.lastName,
+        });
+
+        if (profileError) {
+            toast({ description: "Failed to create user profile. Please contact support.", variant: "destructive" });
+        } else {
+            toast({ description: "Account created successfully! Redirecting..." });
+            router.push({ name: "panel.dashboard" });
+        }
+
     }
 
     toggleLoading();
+};
 
+const navigateToLogin = () => {
+    router.push({ name: "auth.login" });
 };
 </script>
 
 <template>
-    <Form class="space-y-6" @submit="submitForm(form)">
+    <Form class="space-y-6" @submit="submitForm()">
         <div class="flex flex-col space-y-2">
             <h1 class="text-2xl font-semibold tracking-tight">Register</h1>
             <p class="text-sm text-gray-400">Create a new account below.</p>
@@ -88,6 +128,7 @@ const submitForm = async (payload: any) => {
                     :disabled="isLoading"
                     v-bind="componentField"
                 />
+                <p v-if="emailError" class="text-sm text-red-600 mt-1">{{ emailError }}</p>
             </FormItem>
         </FormField>
 
@@ -118,6 +159,7 @@ const submitForm = async (payload: any) => {
                     :disabled="isLoading"
                     v-bind="componentField"
                 />
+                <p v-if="passwordError" class="text-sm text-red-600 mt-1">{{ passwordError }}</p>
             </FormItem>
         </FormField>
 
@@ -150,9 +192,25 @@ const submitForm = async (payload: any) => {
         </FormField>
 
         <!-- Submit Button -->
-        <Button type="submit" id="register" name="register" :disabled="isLoading">
-            <Loader class="mr-1 h-4 w-4 animate-spin" v-if="isLoading" />
-            Register
-        </Button>
+        <div class="flex flex-col gap-4">
+            <Button type="submit" id="register" name="register" :disabled="isLoading">
+                <Loader class="mr-1 h-4 w-4 animate-spin" v-if="isLoading" />
+                Register
+            </Button>
+            <div class="flex flex-col gap-2 justify-between">
+                <Divider text="Already have an account ?"/>
+                <Button
+                    type="button"
+                    id="register"
+                    name="register"
+                    class="text-center hover:text-white bg-transparent text-black outlined"
+                    :disabled="isLoading"
+                    @click="navigateToLogin"
+                >
+                    <Loader class="mr-1 h-4 w-4 animate-spin" v-if="isLoading" />
+                    Sign In
+                </Button>
+            </div>
+        </div>
     </Form>
 </template>

@@ -8,6 +8,7 @@ import { Loader } from "lucide-vue-next";
 import { useAuthStore } from "@/stores/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { Divider } from "@/components/base/divider";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -38,6 +39,10 @@ const submitForm = async (payload: any) => {
 
         toggleLoading();
     }, 500);
+};
+
+const navigateToRegister = () => {
+    router.push({ name: "auth.register" });
 };
 
 </script>
@@ -77,9 +82,25 @@ const submitForm = async (payload: any) => {
             </FormItem>
         </FormField>
 
-        <Button type="submit" id="sign-in" name="sign-in" :disabled="isLoading">
-            <Loader class="mr-1 h-4 w-4 animate-spin" v-if="isLoading" />
-            Sign In
-        </Button>
+        <div class="flex flex-col gap-4">
+            <Button type="submit" id="sign-in" name="sign-in" :disabled="isLoading">
+                <Loader class="mr-1 h-4 w-4 animate-spin" v-if="isLoading" />
+                Sign In
+            </Button>
+            <div class="flex flex-col gap-2 justify-between">
+                <Divider text="Don't have an account ?"/>
+                <Button
+                    type="button"
+                    id="register"
+                    name="register"
+                    class="text-center hover:text-white bg-transparent text-black outlined"
+                    :disabled="isLoading"
+                    @click="navigateToRegister"
+                >
+                    <Loader class="mr-1 h-4 w-4 animate-spin" v-if="isLoading" />
+                    Create an account
+                </Button>
+            </div>
+        </div>
     </Form>
 </template>
