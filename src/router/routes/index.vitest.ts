@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useAuthStore } from "@/stores/auth";
 import { useRouter } from "vue-router";
 
-// Mock the auth store
 vi.mock("@/stores/auth", () => ({
     useAuthStore: vi.fn(() => ({
         setUser: vi.fn(),
@@ -10,7 +9,6 @@ vi.mock("@/stores/auth", () => ({
     })),
 }));
 
-// Mock the router
 vi.mock("vue-router", () => ({
     useRouter: vi.fn(),
 }));

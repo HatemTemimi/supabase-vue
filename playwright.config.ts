@@ -11,7 +11,7 @@ import process from "node:process";
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-    testDir: "./e2e",
+    testDir: "./",
     /* Maximum time one test can run for. */
     timeout: 30 * 1000,
     expect: {
@@ -105,6 +105,6 @@ export default defineConfig({
          */
         command: process.env.CI ? "vite preview --port 5173" : "vite dev",
         port: 5173,
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: true,
     },
 });

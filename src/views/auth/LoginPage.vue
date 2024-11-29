@@ -44,14 +44,13 @@ const submitForm = async (payload: any) => {
 const navigateToRegister = () => {
     router.push({ name: "auth.register" });
 };
-
 </script>
 
 <template>
-    <Form class="space-y-6" @submit="submitForm(form)">
+    <Form class="space-y-6" data-testid="login-form" @submit="submitForm(form)">
         <div class="flex flex-col space-y-2">
-            <h1 class="text-2xl font-semibold tracking-tight">Sign In</h1>
-            <p class="text-sm text-gray-400">Enter your credentials below to proceed.</p>
+            <h1 class="text-2xl font-semibold tracking-tight" data-testid="login-title">Sign In</h1>
+            <p class="text-sm text-gray-400" data-testid="login-description">Enter your credentials below to proceed.</p>
         </div>
 
         <FormField name="email" v-slot="{ componentField }">
@@ -60,6 +59,7 @@ const navigateToRegister = () => {
                 <Input
                     type="email"
                     placeholder="Email Address"
+                    data-testid="email-input"
                     :required="true"
                     v-model="form.email"
                     :disabled="isLoading"
@@ -74,6 +74,7 @@ const navigateToRegister = () => {
                 <Input
                     type="password"
                     placeholder="Password"
+                    data-testid="password-input"
                     :required="true"
                     v-model="form.password"
                     :disabled="isLoading"
@@ -83,16 +84,17 @@ const navigateToRegister = () => {
         </FormField>
 
         <div class="flex flex-col gap-4">
-            <Button type="submit" id="sign-in" name="sign-in" :disabled="isLoading">
+            <Button type="submit" id="sign-in" name="sign-in" data-testid="sign-in-button" :disabled="isLoading">
                 <Loader class="mr-1 h-4 w-4 animate-spin" v-if="isLoading" />
                 Sign In
             </Button>
             <div class="flex flex-col gap-2 justify-between">
-                <Divider text="Don't have an account ?"/>
+                <Divider text="Don't have an account ?" data-testid="divider-text" />
                 <Button
                     type="button"
                     id="register"
                     name="register"
+                    data-testid="register-button"
                     class="text-center hover:text-white bg-transparent text-black outlined"
                     :disabled="isLoading"
                     @click="navigateToRegister"

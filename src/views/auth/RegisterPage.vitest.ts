@@ -44,7 +44,7 @@ describe("RegisterPage.vue", () => {
         expect(registerButton.text()).toBe("Register");
 
         // Check for Sign In button
-        const signInButton = wrapper.find("#signin");
+        const signInButton = wrapper.find("#sign-in");
         expect(signInButton.exists()).toBe(true);
         expect(signInButton.text()).toBe("Sign In");
     });
@@ -125,7 +125,7 @@ describe("RegisterPage.vue", () => {
         const wrapper = mount(RegisterPage);
 
         // Simulate button click
-        await wrapper.find("#signin").trigger("click");
+        await wrapper.find("#sign-in").trigger("click");
 
         // Assert navigation to login page
         expect(mockRouterPush).toHaveBeenCalledWith({ name: "auth.login" });

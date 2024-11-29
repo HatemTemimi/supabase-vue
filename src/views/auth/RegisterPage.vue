@@ -201,8 +201,8 @@ const navigateToLogin = () => {
                 <Divider text="Already have an account ?"/>
                 <Button
                     type="button"
-                    id="signin"
-                    name="signin"
+                    id="sign-in"
+                    name="sign-in"
                     class="text-center hover:text-white bg-transparent text-black outlined"
                     :disabled="isLoading"
                     @click="navigateToLogin"
