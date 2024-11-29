@@ -8,9 +8,14 @@ export default mergeConfig(
     defineConfig({
         test: {
             environment: "jsdom",
-            include: ["**/*.vitest.ts"], // All vitest files
-            exclude: [...configDefaults.exclude, "e2e/**"], // Exclude e2e
+            include: ["**/*.vitest.ts"],
+            exclude: [...configDefaults.exclude, "e2e/**"],
             root: fileURLToPath(new URL("./", import.meta.url)),
+            coverage: {
+                provider: 'v8', // Use 'c8' as the provider
+                reporter: ['text', 'lcov'], // 'text' for terminal output, 'lcov' for detailed reports
+                reportsDirectory: './coverage', // Directory where coverage reports will be saved
+            },
         },
     }),
 );

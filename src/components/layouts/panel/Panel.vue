@@ -10,7 +10,6 @@ import { PanelHeader } from ".";
             <div class="h-full w-[56px] border-r border-gray-200 bg-white">
                 <!-- -->
             </div>
-
             <main class="h-full w-full bg-gray-50">
                 <slot />
             </main>
