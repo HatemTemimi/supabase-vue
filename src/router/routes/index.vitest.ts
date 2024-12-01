@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
 import { useAuthStore } from "@/stores/auth";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useRouter } from "vue-router";
 
 vi.mock("@/stores/auth", () => ({
@@ -15,7 +15,7 @@ vi.mock("vue-router", () => ({
 
 describe("Router", () => {
     let authStore: ReturnType<typeof useAuthStore>;
-    let mockRouterPush: jest.Mock;
+    let mockRouterPush: vi.Mock;
 
     beforeEach(() => {
         authStore = useAuthStore();

@@ -12,9 +12,9 @@ export default mergeConfig(
             exclude: [...configDefaults.exclude, "e2e/**"],
             root: fileURLToPath(new URL("./", import.meta.url)),
             coverage: {
-                provider: 'v8', // Use 'c8' as the provider
-                reporter: ['text', 'lcov'], // 'text' for terminal output, 'lcov' for detailed reports
-                reportsDirectory: './coverage', // Directory where coverage reports will be saved
+                provider: "v8", // Use 'c8' as the provider
+                reporter: ["text", "lcov"], // 'text' for terminal output, 'lcov' for detailed reports
+                reportsDirectory: "./coverage", // Directory where coverage reports will be saved
             },
         },
     }),

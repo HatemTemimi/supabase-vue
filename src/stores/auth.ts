@@ -72,12 +72,7 @@ export const useAuthStore = defineStore("auth", () => {
         return { data, error };
     };
 
-    const createProfile = async (payload: {
-        id: string;
-        email: string;
-        first_name?: string;
-        last_name?: string;
-    }) => {
+    const createProfile = async (payload: { id: string; email: string; first_name?: string; last_name?: string }) => {
         const profilePayload = {
             id: payload.id,
             email: payload.email,

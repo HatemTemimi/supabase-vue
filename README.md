@@ -1,43 +1,129 @@
-# Vue Supabase Skills Test
-
-Welcome! As part of the application process we require our candidates to go through a small skills test. We are looking for your intuition as a developer and desire to produce not only good but great maintainable and testable code.
-
-There are no specific instructions but you are given goals to accomplish. How you accomplish these goals is up to you and your expertise and preferences as a developer. You may change anything within this repository as long as the goals are completed as defined.
+# Updated README
 
 ## Codebase Introduction
-This repository contains Vue 3 and Supabase. You are expected to know how this is setup in your local machine and if you do not, you are expected to figure out how to set it up on your local machine.
 
-In addition to that, components are taken directly from https://shadcn-vue.com with minimal to no changes from their initially installed version.
+This repository contains a Vue 3 application integrated with Supabase. It uses components from [shadcn-vue](https://shadcn-vue.com) with minimal to no modifications from their initial versions.
+
+You are expected to be familiar with setting up Vue 3 and Supabase on your local machine. If you are not, ensure you figure out how to configure the setup locally.
+
+---
 
 ## Quick Start
-1. Run the following commands:
-    ```
+
+1. Run the following commands to set up the project:
+    ```bash
     npm install
     npx supabase start
     npx supabase up
     npm run supabase:edge
     ```
 
-2. Copy .env.example into .env and fill in the variables as necessary.
+2. Copy `.env.example` to `.env` and fill in the necessary environment variables.
 
-## Goals
+---
 
-### I. Create a registration page
-The application already runs and you can login with the username `admin@admin.com` and the password `password`. However, there is currently no way to register a new account. Your first goal is to create a place for users to create a new account and reach the dashboard and have their full name and email displayed.
+## Goals and Changes
 
-### II. Improve UI/UX
-Given the experience you have as a developer, make adjustments to the user experience such as modifying the login and registration experience. There are no right or wrong solutions for this goal but we will be looking at you, as a developer, on what your recommendations are for improvement. Provide reasoning for every change in the form of a comment.
+### **I. Create a Registration Page**
 
-### III. Improve code quality
-Given the experience you have as a developer, make adjustments to the code applying principles such as SOLID, DRY, and general TypeScript practices to improve the application overall. Provide reasoning for every improvement. Provide reasoning for every change in the form of a comment.
+A fully functional registration page was added to allow new users to create accounts. Key features include:
 
-### IV. Advocate for Testing
-The application has tests. However, they aren't production ready. Provide testing as you see fit. Please note we do not expect full coverage of testing, a few examples would be enough.
+- **Form Validation**:
+    - Real-time email validation (e.g., format checking).
+    - Password and confirm password fields with validation for mismatched passwords.
+- **Integration with Supabase**:
+    - Uses Supabase’s `signUp` method to create users.
+    - Automatically creates user profiles upon successful registration.
+- **Redirection**:
+    - Redirects users to the dashboard upon successful registration.
 
-### IV. No Errors
-1. There should be no lint errors when running `npm run lint`.
-2. There should be no type errors when running `npm run type-check`.
-3. There should be no type errors when running `npm run test`.
+---
+
+### **II. Improve UI/UX**
+
+Several improvements were made to enhance the user experience:
+
+1. **Login Page Enhancements**:
+    - Clearer error messages for invalid login attempts.
+    - Added a `data-testid` attribute to critical components for better testability.
+    - Improved button styles for better visual feedback (e.g., hover states, disabled states).
+
+2. **Registration Page Enhancements**:
+    - A divider with text (e.g., "Already have an account?") between the form and navigation buttons for better clarity.
+    - Improved the loading state with a spinner and disabled form inputs during submission.
+
+3. **General Improvements**:
+    - **Consistency**: Ensured consistent spacing, typography, and button styles across the app.
+    - **Accessibility**: Leveraged ARIA roles and labels in critical components for better accessibility.
+    - **Feedback**: Added loader animations to indicate ongoing processes.
+
+---
+
+### **III. Improve Code Quality**
+
+The following principles were applied to enhance the codebase:
+
+1. **Component Reusability**:
+    - Extracted the divider into a reusable component (`Divider`) with optional text as a prop.
+
+2. **Sanitization**:
+    - Introduced input sanitization before submitting data to Supabase, ensuring clean and secure data handling.
+    - Sanitization was handled within the store layer to centralize logic.
+
+3. **Testing Best Practices**:
+    - Added `data-testid` attributes to all key components to improve testability without affecting accessibility.
+
+4. **Code Organization**:
+    - Used a modular structure with well-defined separation of concerns between components, stores, and services.
+
+5. **TypeScript Best Practices**:
+    - Improved type annotations for components, stores, and function signatures to prevent runtime issues.
+    - Refactored to eliminate redundant code and adhere to DRY principles.
+
+---
+
+### **IV. Advocate for Testing**
+
+#### Unit Testing
+- Wrote unit tests for key components like the login form, registration form, and divider.
+- Added tests for the Vuex store (`authStore`) to ensure correct handling of authentication and user profiles.
+
+#### End-to-End Testing
+- Introduced E2E tests using Playwright to cover critical user flows:
+    - Login with valid and invalid credentials.
+    - Registration of a new account.
+    - Navigation between pages.
+    - Display of validation errors.
+
+#### Improvements
+- Used Playwright locators (`getByTestId`, `getByRole`) for robust and maintainable tests.
+- Configured a `baseURL` in Playwright to simplify URL management across tests.
+
+---
+
+### **V. No Errors**
+
+1. **Linting**:
+    - Fixed all linting errors (`npm run lint`).
+
+2. **Type Checking**:
+    - Resolved all TypeScript type errors (`npm run type-check`).
+
+3. **Tests**:
+    - All tests pass without errors (`npm run test`).
+
+---
+
+## Summary of Major Changes
+
+- Added a fully functional registration page.
+- Enhanced UI/UX for login and registration flows.
+- Improved code quality using principles like SOLID, DRY, and modularization.
+- Advocated for testing with unit tests, integration tests, and E2E tests.
+- Ensured a clean and error-free codebase by fixing linting and type issues.
+
+---
 
 ## Submission
-Once you are done with the exam, bundle all of it in a .zip file and submit it to your contact person.
+
+Bundle all files into a `.zip` file and submit it to your contact person. Ensure the repository reflects all the above changes before submission.

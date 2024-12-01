@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { cn } from "@/lib/utils";
 import type { HTMLAttributes } from "vue";
-import { ref, watch} from "vue"
+import { ref, watch } from "vue";
 
 // Define props
 const props = defineProps<{
@@ -25,7 +25,7 @@ watch(
         if (newValue !== internalValue.value) {
             internalValue.value = newValue ?? "";
         }
-    }
+    },
 );
 
 // Emit updates when the input changes
@@ -34,7 +34,6 @@ const updateValue = (event: Event) => {
     internalValue.value = value;
     emits("update:modelValue", value);
 };
-
 </script>
 
 <template>

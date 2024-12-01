@@ -1,6 +1,7 @@
-import { describe, it, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
 import Input from "./Input.vue"; // Adjust the path if needed
+
+import { mount } from "@vue/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("Input.vue", () => {
     it("renders with default props", () => {

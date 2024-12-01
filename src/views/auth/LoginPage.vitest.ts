@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
 import LoginPage from "./LoginPage.vue"; // Adjust the path as needed
+
 import { useAuthStore } from "@/stores/auth";
+import { mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
 import { useRouter } from "vue-router";
 
 // Mock the auth store
@@ -19,11 +20,11 @@ describe("LoginPage.vue", () => {
         const wrapper = mount(LoginPage);
 
         // Check for email input
-        const emailInput = wrapper.find('input[type="email"]');
+        const emailInput = wrapper.find("input[type='email']");
         expect(emailInput.exists()).toBe(true);
 
         // Check for password input
-        const passwordInput = wrapper.find('input[type="password"]');
+        const passwordInput = wrapper.find("input[type='password']");
         expect(passwordInput.exists()).toBe(true);
 
         // Check for Sign In button
@@ -36,60 +37,27 @@ describe("LoginPage.vue", () => {
         expect(registerButton.exists()).toBe(true);
         expect(registerButton.text()).toBe("Create an account");
     });
-/*
-    it("submits the form and calls signInWithPassword", async () => {
-        const mockSignInWithPassword = vi.fn().mockResolvedValue({ error: null });
-        (useAuthStore as jest.Mock).mockReturnValue({
-            signInWithPassword: mockSignInWithPassword,
-        });
-        const mockRouterPush = vi.fn();
-        (useRouter as jest.Mock).mockReturnValue({
-            push: mockRouterPush,
-        });
 
-        const wrapper = mount(LoginPage);
-
-        // Set form values
-        const emailInput = wrapper.find('input[type="email"]');
-        const passwordInput = wrapper.find('input[type="password"]');
-        await emailInput.setValue("test@example.com");
-        await passwordInput.setValue("password123");
-
-        // Simulate form submission
-        const form = wrapper.find("form");
-        form.element.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
-
-        // Assert signInWithPassword is called with correct payload
-        expect(mockSignInWithPassword).toHaveBeenCalledWith({
-            email: "test@example.com",
-            password: "password123",
-        });
-
-        // Assert router navigation
-        expect(mockRouterPush).toHaveBeenCalledWith({ name: "panel.dashboard" });
-    });
-
- */
     it("calls signInWithPassword on successful login", async () => {
         const mockSignInWithPassword = vi.fn().mockResolvedValue({
             data: { user: { id: "123", email: "test@example.com" } },
             error: null,
         });
 
-        (useAuthStore as jest.Mock).mockReturnValue({
+        (useAuthStore as vi.Mock).mockReturnValue({
             signInWithPassword: mockSignInWithPassword,
         });
 
         const mockRouterPush = vi.fn();
-        (useRouter as jest.Mock).mockReturnValue({
+        (useRouter as vi.Mock).mockReturnValue({
             push: mockRouterPush,
         });
 
         const wrapper = mount(LoginPage);
 
         // Set form values
-        const emailInput = wrapper.find('input[type="email"]');
-        const passwordInput = wrapper.find('input[type="password"]');
+        const emailInput = wrapper.find("input[type='email']");
+        const passwordInput = wrapper.find("input[type='password']");
         await emailInput.setValue("test@example.com");
         await passwordInput.setValue("password123");
 
@@ -98,22 +66,19 @@ describe("LoginPage.vue", () => {
         expect(wrapper.vm.form.password).toBe("password123");
 
         // Trigger form submission
- //       await wrapper.find("form").trigger("submit");
+        //       await wrapper.find("form").trigger("submit");
         await wrapper.vm.submitForm({ email: "test@example.com", password: "password123" });
-
 
         // Assert the mocked function was called with form data
         expect(mockSignInWithPassword).toHaveBeenCalledWith({
             email: "test@example.com",
             password: "password123",
         });
-
     });
-
 
     it("navigates to the register page when 'Create an account' button is clicked", async () => {
         const mockRouterPush = vi.fn();
-        (useRouter as jest.Mock).mockReturnValue({
+        (useRouter as vi.Mock).mockReturnValue({
             push: mockRouterPush,
         });
 
@@ -128,7 +93,7 @@ describe("LoginPage.vue", () => {
 
     it("disables inputs and shows loader during form submission", async () => {
         const mockSignInWithPassword = vi.fn(() => new Promise((resolve) => setTimeout(() => resolve({ error: null }), 1000)));
-        (useAuthStore as jest.Mock).mockReturnValue({
+        (useAuthStore as vi.Mock).mockReturnValue({
             signInWithPassword: mockSignInWithPassword,
         });
 
@@ -137,8 +102,8 @@ describe("LoginPage.vue", () => {
         await wrapper.vm.submitForm({ email: "test@example.com", password: "password123" });
 
         // Check loading state
-        const emailInput = wrapper.find('input[type="email"]');
-        const passwordInput = wrapper.find('input[type="password"]');
+        const emailInput = wrapper.find("input[type='email']");
+        const passwordInput = wrapper.find("input[type='password']");
         const signInButton = wrapper.find("#sign-in");
 
         expect(emailInput.attributes("disabled")).toBeDefined();

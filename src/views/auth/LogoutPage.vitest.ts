@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
 import SignOut from "./LogoutPage.vue"; // Replace with actual path
+
 import { useAuthStore } from "@/stores/auth";
+import { mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
 import { useRouter } from "vue-router";
 
 vi.mock("@/stores/auth", () => ({

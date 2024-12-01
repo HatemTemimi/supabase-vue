@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { setActivePinia, createPinia } from "pinia";
 import { useAuthStore } from "./auth";
 import supabase from "@/supabase";
+import { createPinia, setActivePinia } from "pinia";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/supabase", () => {
     return {
@@ -67,7 +67,7 @@ describe("AuthStore", () => {
             error: null,
         };
 
-        (supabase.auth.signInWithPassword as jest.Mock).mockResolvedValue(mockResponse);
+        (supabase.auth.signInWithPassword as vi.Mock).mockResolvedValue(mockResponse);
 
         const credentials = { email: "test@example.com", password: "password123" };
         const response = await store.signInWithPassword(credentials);
@@ -84,7 +84,7 @@ describe("AuthStore", () => {
             error: null,
         };
 
-        (supabase.auth.signUp as jest.Mock).mockResolvedValue(mockResponse);
+        (supabase.auth.signUp as vi.Mock).mockResolvedValue(mockResponse);
 
         const credentials = { email: "newuser@example.com", password: "newpassword123" };
         const response = await store.signUp(credentials);
@@ -98,7 +98,7 @@ describe("AuthStore", () => {
         const store = useAuthStore();
         const mockResponse = { error: null };
 
-        (supabase.auth.signOut as jest.Mock).mockResolvedValue(mockResponse);
+        (supabase.auth.signOut as vi.Mock).mockResolvedValue(mockResponse);
 
         const response = await store.signOut();
 
@@ -110,7 +110,7 @@ describe("AuthStore", () => {
         const store = useAuthStore();
         const mockResponse = { data: { id: "789" }, error: null };
 
-        (supabase.from as jest.Mock).mockReturnValue({
+        (supabase.from as vi.Mock).mockReturnValue({
             insert: vi.fn().mockResolvedValue(mockResponse),
         });
 
@@ -139,7 +139,7 @@ describe("AuthStore", () => {
             },
         };
 
-        (supabase.from as jest.Mock).mockReturnValue({
+        (supabase.from as vi.Mock).mockReturnValue({
             select: vi.fn().mockReturnValue({
                 eq: vi.fn().mockReturnValue({
                     single: vi.fn().mockResolvedValue(mockResponse),
@@ -160,7 +160,7 @@ describe("AuthStore", () => {
         const store = useAuthStore();
         const mockResponse = { data: null };
 
-        (supabase.from as jest.Mock).mockReturnValue({
+        (supabase.from as vi.Mock).mockReturnValue({
             select: vi.fn().mockReturnValue({
                 eq: vi.fn().mockReturnValue({
                     single: vi.fn().mockResolvedValue(mockResponse),

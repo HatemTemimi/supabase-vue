@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
 import RegisterPage from "./RegisterPage.vue"; // Adjust the path as needed
+
 import { useAuthStore } from "@/stores/auth";
+import { mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
 import { useRouter } from "vue-router";
 
 // Mock the auth store
@@ -19,23 +20,23 @@ describe("RegisterPage.vue", () => {
         const wrapper = mount(RegisterPage);
 
         // Check for email input
-        const emailInput = wrapper.find('input[type="email"]');
+        const emailInput = wrapper.find("input[type='email']");
         expect(emailInput.exists()).toBe(true);
 
         // Check for password input
-        const passwordInput = wrapper.find('input[type="password"][placeholder="Password"]');
+        const passwordInput = wrapper.find("input[type='password'][placeholder='Password']");
         expect(passwordInput.exists()).toBe(true);
 
         // Check for confirm password input
-        const confirmPasswordInput = wrapper.find('input[type="password"][placeholder="Confirm Password"]');
+        const confirmPasswordInput = wrapper.find("input[type='password'][placeholder='Confirm Password']");
         expect(confirmPasswordInput.exists()).toBe(true);
 
         // Check for first name input
-        const firstNameInput = wrapper.find('input[placeholder="First Name"]');
+        const firstNameInput = wrapper.find("input[placeholder='First Name']");
         expect(firstNameInput.exists()).toBe(true);
 
         // Check for last name input
-        const lastNameInput = wrapper.find('input[placeholder="Last Name"]');
+        const lastNameInput = wrapper.find("input[placeholder='Last Name']");
         expect(lastNameInput.exists()).toBe(true);
 
         // Check for Register button
@@ -52,7 +53,7 @@ describe("RegisterPage.vue", () => {
     it("shows validation messages for invalid email", async () => {
         const wrapper = mount(RegisterPage);
 
-        const emailInput = wrapper.find('input[type="email"]');
+        const emailInput = wrapper.find("input[type='email']");
         await emailInput.setValue("invalid-email");
 
         // Trigger email watcher
@@ -62,8 +63,8 @@ describe("RegisterPage.vue", () => {
     it("shows validation messages for mismatched passwords", async () => {
         const wrapper = mount(RegisterPage);
 
-        const passwordInput = wrapper.find('input[type="password"][placeholder="Password"]');
-        const confirmPasswordInput = wrapper.find('input[type="password"][placeholder="Confirm Password"]');
+        const passwordInput = wrapper.find("input[type='password'][placeholder='Password']");
+        const confirmPasswordInput = wrapper.find("input[type='password'][placeholder='Confirm Password']");
 
         await passwordInput.setValue("password123");
         await confirmPasswordInput.setValue("differentpassword");
@@ -78,13 +79,13 @@ describe("RegisterPage.vue", () => {
             error: null,
         });
         const mockCreateProfile = vi.fn().mockResolvedValue({ error: null });
-        (useAuthStore as jest.Mock).mockReturnValue({
+        (useAuthStore as vi.Mock).mockReturnValue({
             signUp: mockSignUp,
             createProfile: mockCreateProfile,
         });
 
         const mockRouterPush = vi.fn();
-        (useRouter as jest.Mock).mockReturnValue({
+        (useRouter as vi.Mock).mockReturnValue({
             push: mockRouterPush,
         });
 
@@ -118,7 +119,7 @@ describe("RegisterPage.vue", () => {
 
     it("navigates to the login page when 'Sign In' is clicked", async () => {
         const mockRouterPush = vi.fn();
-        (useRouter as jest.Mock).mockReturnValue({
+        (useRouter as vi.Mock).mockReturnValue({
             push: mockRouterPush,
         });
 
@@ -136,7 +137,7 @@ describe("RegisterPage.vue", () => {
             data: null,
             error: { message: "Registration failed" },
         });
-        (useAuthStore as jest.Mock).mockReturnValue({
+        (useAuthStore as vi.Mock).mockReturnValue({
             signUp: mockSignUp,
         });
 
@@ -152,7 +153,5 @@ describe("RegisterPage.vue", () => {
 
         // Assert signUp is called
         expect(mockSignUp).toHaveBeenCalled();
-
-        // Since toast is mocked, no need to verify toast message here
     });
 });

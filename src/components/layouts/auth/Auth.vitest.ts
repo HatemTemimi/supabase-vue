@@ -1,6 +1,7 @@
-import { describe, it, expect } from "vitest";
-import { mount } from "@vue/test-utils";
 import Auth from "./Auth.vue";
+
+import { mount } from "@vue/test-utils";
+import { describe, expect, it } from "vitest";
 
 describe("Auth.vue", () => {
     const props = {

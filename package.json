@@ -9,6 +9,7 @@
         "preview": "vite preview",
         "test:all": "vitest run && playwright test",
         "test": "vitest --watch",
+        "test:coverage": "vitest run --coverage",
         "test:unit": "vitest --run --config vitest.unit.config.ts --bail 1",
         "test:e2e": "playwright test",
         "build-only": "vite build",
@@ -37,12 +38,13 @@
         "zod": "^3.23.8"
     },
     "devDependencies": {
+        "@faker-js/faker": "^9.2.0",
         "@playwright/test": "^1.44.1",
         "@rushstack/eslint-patch": "^1.8.0",
         "@tailwindcss/forms": "^0.5.7",
         "@tsconfig/node20": "^20.1.4",
         "@types/jsdom": "^21.1.7",
-        "@types/node": "^20.16.10",
+        "@types/node": "^20.17.9",
         "@vitejs/plugin-vue": "^5.0.5",
         "@vue/eslint-config-typescript": "^13.0.0",
         "@vue/test-utils": "^2.4.6",

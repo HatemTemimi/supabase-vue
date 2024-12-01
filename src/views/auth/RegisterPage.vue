@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Button } from "@/components/base/button";
+import { Divider } from "@/components/base/divider";
 import { Form, FormField, FormItem, FormLabel } from "@/components/base/form";
 import { Input } from "@/components/base/input";
 import { useToast } from "@/components/base/toast/use-toast";
@@ -8,7 +9,6 @@ import { Loader } from "lucide-vue-next";
 import { useAuthStore } from "@/stores/auth";
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import { Divider } from "@/components/base/divider";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -36,24 +36,24 @@ const emailError = ref<string>("");
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-watch(() => form.value.email, (email) => {
-    if (!emailRegex.test(email) && email) {
-        emailError.value = "Please enter a valid email address.";
+watch(
+    () => form.value.email,
+    (email) => {
+        if (!emailRegex.test(email) && email) {
+            emailError.value = "Please enter a valid email address.";
+        } else {
+            emailError.value = "";
+        }
+    },
+);
+
+watch([() => form.value.password, () => form.value.confirmPassword], ([password, confirmPassword]) => {
+    if (password !== confirmPassword && confirmPassword) {
+        passwordError.value = "Passwords do not match.";
     } else {
-        emailError.value = "";
+        passwordError.value = "";
     }
 });
-
-watch(
-    [() => form.value.password, () => form.value.confirmPassword],
-    ([password, confirmPassword]) => {
-        if (password !== confirmPassword && confirmPassword) {
-            passwordError.value = "Passwords do not match.";
-        } else {
-            passwordError.value = "";
-        }
-    }
-);
 
 const toggleLoading = () => {
     isLoading.value = !isLoading.value;
@@ -83,8 +83,7 @@ const submitForm = async () => {
     }
 
     //create profile only if User returned
-    if(userData.user?.id){
-
+    if (userData.user?.id) {
         const { error: profileError } = await authStore.createProfile({
             id: userData.user.id,
             email: form.value.email,
@@ -98,7 +97,6 @@ const submitForm = async () => {
             toast({ description: "Account created successfully! Redirecting..." });
             router.push({ name: "panel.dashboard" });
         }
-
     }
 
     toggleLoading();
@@ -110,10 +108,10 @@ const navigateToLogin = () => {
 </script>
 
 <template>
-    <Form class="space-y-6" @submit="submitForm()">
+    <Form class="space-y-6" data-testid="register-form" @submit="submitForm()">
         <div class="flex flex-col space-y-2">
-            <h1 class="text-2xl font-semibold tracking-tight">Register</h1>
-            <p class="text-sm text-gray-400">Create a new account below.</p>
+            <h1 class="text-2xl font-semibold tracking-tight" data-testid="register-title">Register</h1>
+            <p class="text-sm text-gray-400" data-testid="register-description">Create a new account below.</p>
         </div>
 
         <!-- Email Input -->
@@ -123,12 +121,13 @@ const navigateToLogin = () => {
                 <Input
                     type="email"
                     placeholder="Email Address"
+                    data-testid="email-input"
                     v-model="form.email"
                     :required="true"
                     :disabled="isLoading"
                     v-bind="componentField"
                 />
-                <p v-if="emailError" class="text-sm text-red-600 mt-1">{{ emailError }}</p>
+                <p v-if="emailError" class="mt-1 text-sm text-red-600">{{ emailError }}</p>
             </FormItem>
         </FormField>
 
@@ -139,6 +138,7 @@ const navigateToLogin = () => {
                 <Input
                     type="password"
                     placeholder="Password"
+                    data-testid="password-input"
                     v-model="form.password"
                     :required="true"
                     :disabled="isLoading"
@@ -154,12 +154,13 @@ const navigateToLogin = () => {
                 <Input
                     type="password"
                     placeholder="Confirm Password"
+                    data-testid="confirm-password-input"
                     v-model="form.confirmPassword"
                     :required="true"
                     :disabled="isLoading"
                     v-bind="componentField"
                 />
-                <p v-if="passwordError" class="text-sm text-red-600 mt-1">{{ passwordError }}</p>
+                <p v-if="passwordError" class="mt-1 text-sm text-red-600">{{ passwordError }}</p>
             </FormItem>
         </FormField>
 
@@ -170,6 +171,7 @@ const navigateToLogin = () => {
                 <Input
                     type="text"
                     placeholder="First Name"
+                    data-testid="first-name-input"
                     v-model="form.firstName"
                     :disabled="isLoading"
                     v-bind="componentField"
@@ -184,6 +186,7 @@ const navigateToLogin = () => {
                 <Input
                     type="text"
                     placeholder="Last Name"
+                    data-testid="last-name-input"
                     v-model="form.lastName"
                     :disabled="isLoading"
                     v-bind="componentField"
@@ -193,17 +196,18 @@ const navigateToLogin = () => {
 
         <!-- Submit Button -->
         <div class="flex flex-col gap-4">
-            <Button type="submit" id="register" name="register" :disabled="isLoading">
+            <Button type="submit" id="register" name="register" data-testid="register-button" :disabled="isLoading">
                 <Loader class="mr-1 h-4 w-4 animate-spin" v-if="isLoading" />
                 Register
             </Button>
-            <div class="flex flex-col gap-2 justify-between">
-                <Divider text="Already have an account ?"/>
+            <div class="flex flex-col justify-between gap-2">
+                <Divider text="Already have an account ?" />
                 <Button
                     type="button"
                     id="sign-in"
                     name="sign-in"
-                    class="text-center hover:text-white bg-transparent text-black outlined"
+                    data-testid="sign-in-button"
+                    class="outlined bg-transparent text-center text-black hover:text-white"
                     :disabled="isLoading"
                     @click="navigateToLogin"
                 >

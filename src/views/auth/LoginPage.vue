@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Button } from "@/components/base/button";
+import { Divider } from "@/components/base/divider";
 import { Form, FormField, FormItem, FormLabel } from "@/components/base/form";
 import { Input } from "@/components/base/input";
 import { useToast } from "@/components/base/toast/use-toast";
@@ -8,7 +9,6 @@ import { Loader } from "lucide-vue-next";
 import { useAuthStore } from "@/stores/auth";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { Divider } from "@/components/base/divider";
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -88,14 +88,14 @@ const navigateToRegister = () => {
                 <Loader class="mr-1 h-4 w-4 animate-spin" v-if="isLoading" />
                 Sign In
             </Button>
-            <div class="flex flex-col gap-2 justify-between">
+            <div class="flex flex-col justify-between gap-2">
                 <Divider text="Don't have an account ?" data-testid="divider-text" />
                 <Button
                     type="button"
                     id="register"
                     name="register"
                     data-testid="register-button"
-                    class="text-center hover:text-white bg-transparent text-black outlined"
+                    class="outlined bg-transparent text-center text-black hover:text-white"
                     :disabled="isLoading"
                     @click="navigateToRegister"
                 >

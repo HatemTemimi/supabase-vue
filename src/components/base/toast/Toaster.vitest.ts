@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { useToast, toast } from "./use-toast";
+import { toast, useToast } from "./use-toast";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 describe("useToast", () => {
     let toasts: ReturnType<typeof useToast>;
@@ -72,5 +72,4 @@ describe("useToast", () => {
 
         toasts.toasts.value.forEach((t) => expect(t.open).toBe(false));
     });
-
 });

@@ -1,7 +1,8 @@
-import { describe, it, expect, vi } from "vitest";
-import { mount } from "@vue/test-utils";
 import DashboardIndex from "./DashboardIndexPage.vue"; // Adjust the path if needed
+
 import { useAuthStore } from "@/stores/auth";
+import { mount } from "@vue/test-utils";
+import { describe, expect, it, vi } from "vitest";
 
 // Mock the useAuthStore function
 vi.mock("@/stores/auth", () => {
@@ -24,7 +25,7 @@ describe("DashboardIndex.vue", () => {
         };
 
         // Mock the store behavior
-        (useAuthStore as jest.Mock).mockReturnValue({
+        (useAuthStore as vi.Mock).mockReturnValue({
             getProfile: vi.fn(() => mockProfile),
         });
 
@@ -54,7 +55,7 @@ describe("DashboardIndex.vue", () => {
         };
 
         // Mock the store behavior
-        (useAuthStore as jest.Mock).mockReturnValue({
+        (useAuthStore as vi.Mock).mockReturnValue({
             getProfile: vi.fn(() => emptyProfile),
         });
 
