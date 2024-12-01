@@ -1,6 +1,7 @@
 import ErrorPage from "./ErrorPage.vue"; // Adjust the path if needed
 
 import { mount } from "@vue/test-utils";
+import type { Mock } from "vitest";
 import { describe, expect, it, vi } from "vitest";
 import { useRoute } from "vue-router";
 
@@ -12,7 +13,7 @@ vi.mock("vue-router", () => ({
 describe("ErrorPage.vue", () => {
     it("renders the correct error message for 404", () => {
         // Mock the route params for error type
-        (useRoute as vi.Mock).mockReturnValue({
+        (useRoute as Mock).mockReturnValue({
             params: { error: "404" },
         });
 
@@ -31,7 +32,7 @@ describe("ErrorPage.vue", () => {
 
     it("renders the default error message for unsupported error types", () => {
         // Mock the route params with an unsupported error type
-        (useRoute as vi.Mock).mockReturnValue({
+        (useRoute as Mock).mockReturnValue({
             params: { error: "500" },
         });
 
@@ -50,7 +51,7 @@ describe("ErrorPage.vue", () => {
 
     it("renders the default error message when no error type is provided", () => {
         // Mock the route params with no error type
-        (useRoute as vi.Mock).mockReturnValue({
+        (useRoute as Mock).mockReturnValue({
             params: {},
         });
 

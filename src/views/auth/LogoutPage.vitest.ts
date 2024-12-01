@@ -1,12 +1,16 @@
-import SignOut from "./LogoutPage.vue"; // Replace with actual path
+import SignOut from "./LogoutPage.vue";
 
 import { useAuthStore } from "@/stores/auth";
 import { mount } from "@vue/test-utils";
 import { describe, expect, it, vi } from "vitest";
 import { useRouter } from "vue-router";
 
+const mockAuthStore = {
+    signOut: vi.fn(),
+};
+
 vi.mock("@/stores/auth", () => ({
-    useAuthStore: vi.fn(),
+    useAuthStore: vi.fn(() => mockAuthStore),
 }));
 
 vi.mock("vue-router", () => ({
@@ -32,11 +36,11 @@ describe("SignOut.vue", () => {
         const mockSignOut = vi.fn().mockResolvedValue(null);
         const mockRouterPush = vi.fn();
 
-        (useAuthStore as vi.Mock).mockReturnValue({
+        (useAuthStore as any).mockReturnValue({
             signOut: mockSignOut,
         });
 
-        (useRouter as vi.Mock).mockReturnValue({
+        (useRouter as any).mockReturnValue({
             push: mockRouterPush,
         });
 
@@ -44,7 +48,6 @@ describe("SignOut.vue", () => {
 
         mount(SignOut);
 
-        // Fast forward 1.5 seconds
         vi.advanceTimersByTime(1500);
 
         // Assert signOut was called

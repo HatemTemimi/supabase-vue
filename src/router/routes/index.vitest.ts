@@ -1,7 +1,9 @@
 import { useAuthStore } from "@/stores/auth";
+import type { Mock } from "vitest";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useRouter } from "vue-router";
 
+// Mock the auth store
 vi.mock("@/stores/auth", () => ({
     useAuthStore: vi.fn(() => ({
         setUser: vi.fn(),
@@ -9,35 +11,55 @@ vi.mock("@/stores/auth", () => ({
     })),
 }));
 
+// Mock the router
 vi.mock("vue-router", () => ({
     useRouter: vi.fn(),
 }));
 
+// Define the type for route meta
+interface RouteMeta {
+    auth?: boolean | "block";
+}
+
+// Define the type for the `to` object
+interface Route {
+    name?: string;
+    path?: string;
+    meta?: RouteMeta;
+}
+
 describe("Router", () => {
     let authStore: ReturnType<typeof useAuthStore>;
-    let mockRouterPush: vi.Mock;
+    let mockRouterPush: Mock;
 
     beforeEach(() => {
         authStore = useAuthStore();
         mockRouterPush = vi.fn();
 
-        (useRouter as vi.Mock).mockReturnValue({
+        (useRouter as Mock).mockReturnValue({
             push: mockRouterPush,
         });
     });
 
     it("redirects authenticated users away from blocked routes", async () => {
-        const mockUser = { id: "123" };
+        const mockUser = {
+            id: "123",
+            email: "test@example.com",
+            app_metadata: {},
+            user_metadata: {},
+            aud: "authenticated",
+            created_at: new Date().toISOString(),
+        };
 
-        authStore.getUser.mockReturnValue(mockUser);
-        authStore.setUser.mockImplementation((user) => {
-            authStore.getUser.mockReturnValue(user);
+        (authStore.getUser as Mock).mockReturnValue(mockUser);
+        (authStore.setUser as Mock).mockImplementation((user) => {
+            (authStore.getUser as Mock).mockReturnValue(user);
         });
 
-        const to = { name: "auth.login", meta: { auth: "block" } };
+        const to: Route = { name: "auth.login", meta: { auth: "block" } };
 
         // Simulate redirection logic
-        if (to.meta.auth === "block" && authStore.getUser()) {
+        if (to.meta?.auth === "block" && authStore.getUser()) {
             mockRouterPush({ name: "panel.dashboard" });
         }
 
@@ -45,12 +67,12 @@ describe("Router", () => {
     });
 
     it("redirects unauthenticated users from protected routes", async () => {
-        authStore.getUser.mockReturnValue(null);
+        (authStore.getUser as Mock).mockReturnValue(null);
 
-        const to = { name: "panel.dashboard", meta: { auth: true } };
+        const to: Route = { name: "panel.dashboard", meta: { auth: true } };
 
         // Simulate redirection logic
-        if (!authStore.getUser() && to.meta.auth === true) {
+        if (!authStore.getUser() && to.meta?.auth === true) {
             mockRouterPush({ name: "auth.login" });
         }
 
@@ -58,20 +80,20 @@ describe("Router", () => {
     });
 
     it("allows navigation to public routes", async () => {
-        authStore.getUser.mockReturnValue(null);
+        (authStore.getUser as Mock).mockReturnValue(null);
 
-        const to = { name: "system.error" };
+        const to: Route = { name: "system.error", meta: {} };
 
         // Simulate public route navigation
         if (!to.meta?.auth) {
             mockRouterPush(to);
         }
 
-        expect(mockRouterPush).toHaveBeenCalledWith({ name: "system.error" });
+        expect(mockRouterPush).toHaveBeenCalledWith({ name: "system.error", meta: {} });
     });
 
     it("handles 404 redirection correctly", async () => {
-        const to = { path: "/non-existent-route" };
+        const to: Route = { path: "/non-existent-route", name: undefined };
 
         // Simulate 404 redirection
         if (!to.name) {
@@ -82,16 +104,24 @@ describe("Router", () => {
     });
 
     it("stores user data when authenticated", async () => {
-        const mockUser = { id: "123", email: "test@example.com" };
+        const mockUser = {
+            id: "123",
+            email: "test@example.com",
+            app_metadata: {},
+            user_metadata: {},
+            aud: "authenticated",
+            created_at: new Date().toISOString(),
+        };
 
-        authStore.getUser.mockReturnValue(null);
-        authStore.setUser.mockImplementation((user) => {
-            authStore.getUser.mockReturnValue(user);
+        (authStore.getUser as Mock).mockReturnValue(null);
+        (authStore.setUser as Mock).mockImplementation((user) => {
+            (authStore.getUser as Mock).mockReturnValue(user);
         });
 
         authStore.setUser(mockUser);
 
-        expect(authStore.getUser().id).toBe("123");
-        expect(authStore.getUser().email).toBe("test@example.com");
+        const user = authStore.getUser();
+        expect(user.id).toBe("123");
+        expect(user.email).toBe("test@example.com");
     });
 });

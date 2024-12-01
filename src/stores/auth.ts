@@ -5,7 +5,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useAuthStore = defineStore("auth", () => {
-    const user = ref<any>({
+    const user = ref<User>({
         app_metadata: {
             provider: "",
             providers: [],
@@ -18,7 +18,7 @@ export const useAuthStore = defineStore("auth", () => {
         id: "",
         identities: [],
         is_anonymous: false,
-        last_sign_in_at: null,
+        last_sign_in_at: undefined,
         phone: "",
         role: "",
         updated_at: "",

@@ -55,7 +55,8 @@ describe("useToast", () => {
     it("updates an existing toast", () => {
         const result = toast({ title: "Update Me", description: "Old Description" });
 
-        result.update({ title: "Updated", description: "New Description" });
+        // Ensure the update payload includes the id
+        result.update({ id: result.id, title: "Updated", description: "New Description" });
 
         const updatedToast = toasts.toasts.value.find((t) => t.id === result.id);
         expect(updatedToast).toMatchObject({
